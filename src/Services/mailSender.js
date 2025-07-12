@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
+dotenv.config();   
 const sendMail = async (mailData) => {
     const tranxporter = nodemailer.createTransport({
         service : "gmail",
