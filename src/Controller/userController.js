@@ -2,6 +2,8 @@ import User from "../Model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import sendMail from "../Services/mailSender.js";
+import { registerMail } from "../Static/registerMail.js";
 dotenv.config();
 
 //New User registration
@@ -29,6 +31,20 @@ const userRegister = async (req, res) => {
         });
         return;
     }
+
+    //for sending mail after registration
+    const mailData = {
+        from : "ytmagar08@gmail.com",
+        to : email,
+        subject : "Registration Successful",
+        html : registerMail()
+    }
+
+    sendMail(mailData);
+
+    res.status(200).json({
+        message : "Registration successful, please check your email for confirmation."
+    })
 };
 
-export { userRegister};
+export { userRegister };
