@@ -47,4 +47,48 @@ const userRegister = async (req, res) => {
     })
 };
 
-export { userRegister };
+//User login
+const userLogin = async (req, res) => {
+    const { email, password} = req.body;
+    if (!email || !password){
+        res.status(400).json({
+            message : "Email and password are required!!"
+        });
+        return;
+    }
+
+    const findUser = await User.findOne({           //find user by email
+        email : email
+    });
+
+    if (!findUser){ 
+        res.status(404).json({
+            message : "User not found, please register first!!"
+        });
+        return;
+    }
+
+    //compare the password with the hashed password in the database
+    const isPasswordValid = bcrypt.compareSync(password, findUser.password);
+    if ( !isPasswordValid){
+        res.status(401).json({
+            message : "Invalid password!!"
+        });
+        return;
+    }
+
+    //create a token for the user
+    const token = jwt.sign({
+        userId : findUser._id,
+        name : findUser.fullName,
+    }, process.env.JWT_SECRET_KEY, {
+        expiresIn : "10d"
+    })
+
+    res.status(200).json({
+        message : "Login successful.",
+        token : token
+    })
+};
+
+export { userRegister, userLogin};

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();   
 const sendMail = async (mailData) => {
-    const tranxporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
         service : "gmail",
         auth : {
             user : "ytmagar08@gmail.com",
@@ -11,7 +11,7 @@ const sendMail = async (mailData) => {
         }
     });
     try {
-        const send = await tranxporter.sendMail(mailData)
+        const send = await transporter.sendMail(mailData)
     }
     catch (error) {
         console.log(error.message)
