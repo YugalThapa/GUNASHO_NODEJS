@@ -11,9 +11,23 @@ const complainSchema = new Schema({
         ref : "User",
         required : true
     },
-    categtory : {
+    category : {
+        type : String,
+        enum: ["road", "water", "electricity", "sanitation", "other"],
+        required : true
+   },
+   location : {
+    type : String,
+    required : true
+   },
+   contactInfo : {
         type : String,
         required : true
+   },
+   currentStatus : {
+        type : String,
+        enum: ["pending", "in-progress", "resolved", "rejected"],
+        default: "pending" 
    },
    description : {
     type : String,

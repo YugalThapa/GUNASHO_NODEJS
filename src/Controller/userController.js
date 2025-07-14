@@ -22,7 +22,7 @@ const userRegister = async (req, res) => {
         email: email,
         password: bcrypt.hashSync(password, 10), //hash the password
         address: address,
-        citizenId: citizenId,
+        citizenId: citizenId
     });
 
     if (!newUser) {
