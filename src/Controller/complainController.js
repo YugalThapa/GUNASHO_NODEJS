@@ -56,12 +56,32 @@ const ComplainGet = async (req, res) => {
 const complainUpdate = async (req, res) => {
     const { complainFor, category, description, location , contactInfo, currentStatus } = req.body;
     const {complainId} = req.params;
+    const userId = req.user.id;
+
     if (!complainId){
         res.status(400).json({
-            message : "Invalid complain Id!!"
+            message : "Complain Id is required!!"
         });
         return;
     }
+
+    //finding the complain to update
+    const findComplain = await Complain.findById(complainId);
+    if (!findComplain){
+        res.status(404).json({
+            message : "Complain with this id not found!!"
+        });
+        return;
+    }
+
+    //authorizing only the user who create complain
+    if (!findComplain.complainBy.equals(userId)) {
+        res.status(403).json({
+            message: "You are not authorized to update this complain!"
+        });
+        return;
+    }
+
     if ( complainFor === undefined &&
         category === undefined &&                           //check for at least one field to update
         description === undefined &&
@@ -82,13 +102,7 @@ const complainUpdate = async (req, res) => {
     if (contactInfo) updateFields.contactInfo = contactInfo;
     if (currentStatus) updateFields.currentStatus = currentStatus;
 
-    const findComplain = await Complain.findById(complainId);
-    if (!findComplain){
-        res.status(404).json({
-            message : "Complain with this id not found!!"
-        });
-        return;
-    }
+    
     const updateComplain = await Complain.findByIdAndUpdate(complainId, updateFields, {new : true});
     res.status(200).json({
         message : "Complain updated sucessfully.",
@@ -99,19 +113,38 @@ const complainUpdate = async (req, res) => {
 //delete the complain
 const complainDelete = async (req, res) => {
     const {complainId} = req.params;
+    const userId = req.user.id;
+
     if (!complainId ){
         res.status(400).json({
-            message : "Invalid complain Id!!"
+            message : "Complain Id is required!!"
         });
         return;
     };
+
+    //finding the complain to delete
+    const findComplain = await Complain.findById(complainId);
+    if (!findComplain){
+        res.status(404).json({
+            message : "Complain with this id not found!!"
+        });
+        return;
+    }
+
+    //authorizing only the user who create complain
+    if (!findComplain.complainBy.equals(userId)) {
+        res.status(403).json({
+            message: "You are not authorized to update this complain!"
+        });
+        return;
+    }
 
     const deleteComplain = await Complain.findByIdAndDelete({
         _id : complainId
     });
     if (!deleteComplain){
         res.status(404).json({
-            message : "Complain with this id is not found!!"
+            message : "Failed to delete!"
         });
         return;
     };
@@ -126,17 +159,3 @@ const complainDelete = async (req, res) => {
 export { ComplainGet, complainUpdate , complainDelete};
 
 
-
-// const complainCreate = await Complain.create({
-    //     complainFor : complainFor,
-    //     complainBy : userId
-    // });
-    // if ( !complainCreate){
-    //     res.status(400).json({
-    //         message : "Complain creation failed!!"
-    //     });
-    //     return;
-    // }
-    // res.status(200).json({
-    //     message : "Complain created successfully."
-    // });
