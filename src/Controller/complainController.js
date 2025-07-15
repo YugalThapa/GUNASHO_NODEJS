@@ -11,7 +11,7 @@ const ComplainGet = async (req, res) => {
     
     if ( !complainFor || !userId || !category || !description || !location || !contactInfo) {
         res.status(400).json({
-            message : "All fields are required (except currentStatus)!!"
+            message : "All fields are required (except currentStatus and image)!!"
         });
         return;
     }
@@ -40,7 +40,7 @@ const ComplainGet = async (req, res) => {
         const mailData = {
             from : userForMail.email,
             to : process.env.EMAIL, // Use the email from .env file
-            subject : "Complain Registration Successful",
+            subject : "New Complain Registred",
             html : complainMail(complainCreate, userForMail)
         };
 
