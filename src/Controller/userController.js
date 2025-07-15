@@ -34,7 +34,7 @@ const userRegister = async (req, res) => {
 
     //for sending mail after registration
     const mailData = {
-        from : "ytmagar08@gmail.com",
+        from : process.env.EMAIL, // Use the email from .env file
         to : email,
         subject : "Registration Successful",
         html : registerMail({

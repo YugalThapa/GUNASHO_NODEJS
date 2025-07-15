@@ -2,6 +2,8 @@ import User from "../Model/userModel.js";
 import Complain from "../Model/complainModel.js";
 import sendMail from "../Services/mailSender.js";
 import { complainMail } from "../Static/complainMail.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const ComplainGet = async (req, res) => {
     const { complainFor, category, description, location , contactInfo } = req.body;
@@ -37,7 +39,7 @@ const ComplainGet = async (req, res) => {
 
         const mailData = {
             from : userForMail.email,
-            to : "ytmagar08@gmail.com",
+            to : process.env.EMAIL, // Use the email from .env file
             subject : "Complain Registration Successful",
             html : complainMail(complainCreate, userForMail)
         };
