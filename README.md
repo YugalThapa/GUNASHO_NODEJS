@@ -5,7 +5,7 @@ Gunasho is a Node.js-based backend project that allows users (citizens) to regis
 ---
 
 ## 📁 Project Structure
-
+<pre> ```
 GUNASHO_NODEJS/
 │
 ├── src/
@@ -39,7 +39,7 @@ GUNASHO_NODEJS/
 ├── index.js                       # Entry point of the application
 ├── package.json                   # Project dependencies and scripts
 └── package-lock.json              # Version-locked dependencies
-
+```<pre> 
 ---
 
 ## 🚀 Features
