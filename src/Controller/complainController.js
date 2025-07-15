@@ -13,6 +13,10 @@ const ComplainGet = async (req, res) => {
         });
         return;
     }
+    let imageName = ""
+    if(req.file){
+        imageName =req.file.filename; //if image is uploaded, get the file name
+    }
 
     try {
         const complainCreate = await Complain.create({
@@ -21,7 +25,8 @@ const ComplainGet = async (req, res) => {
             description : description,
             complainBy : userId,
             location : location,
-            contactInfo : contactInfo
+            contactInfo : contactInfo,
+            image : imageName
         });
 
         //for sending mail after complain registration

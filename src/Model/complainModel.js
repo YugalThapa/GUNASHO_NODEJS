@@ -32,6 +32,9 @@ const complainSchema = new Schema({
    description : {
     type : String,
     required : true
+   },
+   image : {
+    type : String
    }
    },{
     timestamps : true
