@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import userRoute from "./src/Routes/userRoute.js";
 import complainRoute from "./src/Routes/complainRoute.js";
 
+
 const app = express();      //create an express app 
 dotenv.config();            //load env variables
 app.use(express.json());     //parswe incoming JSON requests

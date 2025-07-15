@@ -37,7 +37,12 @@ const userRegister = async (req, res) => {
         from : "ytmagar08@gmail.com",
         to : email,
         subject : "Registration Successful",
-        html : registerMail()
+        html : registerMail({
+            fullName: fullName,
+            email: email,
+            address: address,
+            citizenId: citizenId
+        })
     }
 
     sendMail(mailData);

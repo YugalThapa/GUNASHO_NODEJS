@@ -31,16 +31,16 @@ const ComplainGet = async (req, res) => {
         }
 
         const mailData = {
-            from : "ytmagar08@gmail.com",
-            to : userForMail.email,
+            from : userForMail.email,
+            to : "ytmagar08@gmail.com",
             subject : "Complain Registration Successful",
-            html : complainMail()
-        }
+            html : complainMail(complainCreate, userForMail)
+        };
 
         sendMail(mailData);
 
         res.status(201).json ({
-            message : "Complain created successfully. You can verify complain through mail.",
+            message : "Complain created successfully. Mail sent to department.",
             data : complainCreate
         });
    }
@@ -134,7 +134,7 @@ const complainDelete = async (req, res) => {
     //authorizing only the user who create complain
     if (!findComplain.complainBy.equals(userId)) {
         res.status(403).json({
-            message: "You are not authorized to update this complain!"
+            message: "You are not authorized to delete this complain!"
         });
         return;
     }
@@ -155,7 +155,44 @@ const complainDelete = async (req, res) => {
 
 }
 
+//show complain history
+//filter by category and currentStatus
+const complainHistory = async(req, res) => {
+    try {
+        const userId = req.user.id;
+        const { category, currentStatus} = req.query;
+    
+        const filterHistory = {
+            complainBy : userId
+        }
 
-export { ComplainGet, complainUpdate , complainDelete};
+        if (category){
+            filterHistory.category = category
+        }
+        if (currentStatus){
+            filterHistory.currentStatus = currentStatus
+        }
+
+        const myComplains = await Complain.find(filterHistory).sort({ createdAt: -1});
+        if (!myComplains || myComplains.length === 0) {
+            return res.status(404).json({
+                message: "No complaints found."
+            });
+        }
+        res.status(200).json({
+            message :  "Complaint history fetched successfully.",
+            data : myComplains
+        });
+    
+    
+    } catch (error){
+        res.status(500).json({
+            message : "Failed to fetch complaint history!!",
+            error : error.message
+        });
+    }
+};
+
+export { ComplainGet, complainUpdate , complainDelete, complainHistory };
 
 
